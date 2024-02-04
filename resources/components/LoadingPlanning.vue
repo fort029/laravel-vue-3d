@@ -1,8 +1,8 @@
 <template>
-  <div class="card">
-    <div class="card-header">{{ capitalizeFirstLetter("loading planning") }}</div>
-    <Renderer alpha antialias orbit-ctrl pointer shadow resize="window" ref="renderer">
-      <Camera :position="{ x: 0, y: 15, z: 15 }" :look-at="{ x: 0, y: 100, z: 0 }" />
+  <div class="card" style="width: 449px; height:356px">
+    <!-- <div class="card-header">{{ capitalizeFirstLetter("loading planning") }}</div> -->
+    <Renderer alpha antialias orbit-ctrl pointer shadow resize ref="renderer">
+      <Camera :position="{ x: -10, y: 10, z: 10 }" :look-at="{ x: 0, y: 100, z: 0 }" />
       <Scene>
         <PointLight :position="{ x: 100, y: 100, z: 100 }" />
         <PointLight :position="{ x: -100, y: 100, z: 100 }" />

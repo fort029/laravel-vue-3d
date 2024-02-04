@@ -1,6 +1,6 @@
 <template>
-    <div class="card">
-        <div class="card-header">{{ capitalizeFirstLetter("house direction") }}</div>
+    <div class="card" style="width: 449px;">
+        <!-- <div class="card-header">{{ capitalizeFirstLetter("house direction") }}</div> -->
         <div class="menu">
             <button type="button" class="btn-icon" @click="setModel('/images/1.png', 'model')">
                 <img :src="'/images/1.png'" />
@@ -19,9 +19,9 @@
         <div class="stage">
             <v-stage :config="configKonva" ref="stage">
                 <v-layer>
-                    <v-image :config="{ name: 'house', x: 200, y: 60, image: model, draggable: true }" @transform="handleTransform" />
-                    <v-image :config="{ x: 220, y: 240, width: 40, height: 40, image: sun }" />
-                    <v-image :config="{ x: 390, y: 190, width: 100, height: 100, image: direction }" />
+                    <v-image :config="{ name: 'house', x: 170, y: 60, image: model, draggable: true }" @transform="handleTransform" />
+                    <v-image :config="{ x: 170, y: 240, width: 40, height: 40, image: sun }" />
+                    <v-image :config="{ x: 290, y: 190, width: 100, height: 100, image: direction }" />
                     <v-transformer ref="transformer" :config="{ resizeEnabled: false }" />
                 </v-layer>
             </v-stage>
@@ -34,7 +34,7 @@ import { ref, onMounted, nextTick } from 'vue'
 
 const configKonva = ref(
     {
-        width: 500,
+        width: 449,
         height: 300
     }
 );
