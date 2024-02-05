@@ -19,6 +19,7 @@
     },
     "dependencies": {
         "konva": "^9.3.2",
+        "primevue": "^3.48.0",
         "three": "^0.134.0",
         "troisjs": "^0.3.4",
         "vue-konva": "^3.0.2"
