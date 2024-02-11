@@ -8,6 +8,7 @@ import HouseDirection from '../components/HouseDirection.vue';
 import helpMixin from '../js/helper';
 
 import Countdown from '../components/CountDown.vue';
+import LiveRoom from '../components/LiveRoom.vue';
  
 import PrimeVue from "primevue/config";
 import Bootstrap_PT from "../passthrough/bootstrap";
@@ -23,7 +24,7 @@ if(document.getElementById("app")){
     app.component('loading-planning', LoadingPlanning);
     app.component('house-direction', HouseDirection);
     app.component("count-down", Countdown);
-
+    app.component("live-room", LiveRoom);
     app.directive('animateonscroll', AnimateOnScroll);
     
     app.mount('#app'); 

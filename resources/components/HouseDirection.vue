@@ -17,7 +17,7 @@
         </div>
         
         <div class="stage">
-            <v-stage :config="configKonva" ref="stage">
+            <v-stage :config="configKonva">
                 <v-layer>
                     <v-image :config="{ name: 'house', x: 170, y: 60, image: model, draggable: true }" @transform="handleTransform" />
                     <v-image :config="{ x: 170, y: 240, width: 40, height: 40, image: sun }" />
@@ -39,7 +39,6 @@ const configKonva = ref(
     }
 );
 
-const stage = ref(null);
 const transformer = ref(null);
 
 const model = ref();

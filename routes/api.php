@@ -17,3 +17,8 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::post('/sendMessage', function (Request $request) {
+    event(new App\Events\MyEvent($request->message));
+    return response('success', 201);
+});
