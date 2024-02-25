@@ -5,10 +5,13 @@
         {{ message.message }}
       </li>
     </ul>
-    <div class="input-group">
-      <input type="text" name="message" v-model="txt" class="form-control" placeholder="Message" aria-label="Message"
-        aria-describedby="button-send">
+    <div class="input-group has-validation" :class="error?'was-validated':''">
+      <input type="text" name="message" v-model="txt" class="form-control " placeholder="Message" aria-label="Message"
+        aria-describedby="button-send" @input="error=false" required>
       <button type="button" class="btn btn-outline-secondary" @click="sendMessage" id="button-send">Send ({{countClick}})</button>
+      <div class="invalid-feedback ms-2">
+         Please write message.
+      </div>
     </div>
   </div>
 </template>
@@ -16,11 +19,15 @@
 
 <script setup>
 import Pusher from 'pusher-js';
-import { ref,nextTick } from "vue";
+import { ref, nextTick } from "vue";
 
-const messages = ref([]);
+const props = defineProps({
+  archiveMessages: Array,
+});
+const messages = ref(props.archiveMessages);
 const txt = ref('')
 const scrollToMe = ref(null);
+const error = ref(false);
 
 var timer;
 const countClick =  ref(0);
@@ -42,10 +49,14 @@ channel.bind('message', async function (data) {
 });
 
 function sendMessage() {
-  countClick.value++;
-  clearTimeout(timer);
-  console.log('Timer reset');
-  startTimer();
+  if(txt.value != ""){
+    countClick.value++;
+    clearTimeout(timer);
+    console.log('Timer reset');
+    startTimer();
+  }else{
+    error.value=true;
+  }
 }
 
 function startTimer() {

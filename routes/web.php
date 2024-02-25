@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Models\Message;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,7 +14,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    $archiveMessages = Message::select('message')->latest()->take(10)->get();
+    return view('welcome', ['archiveMessages'=>array_reverse($archiveMessages->toArray())]);
 });
 
 Auth::routes();

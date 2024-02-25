@@ -278,7 +278,7 @@
                     <p class="lead">In many modern web applications, WebSockets are used to implement realtime, live-updating user interfaces. When some data is updated on the server, a message is typically sent over a WebSocket connection to be handled by the client.</p>
                 </div>
                 <div class="col-md-5 order-md-1">
-                    <live-room></live-room>
+                    <live-room :archive-messages="{!! htmlentities(json_encode($archiveMessages,JSON_HEX_QUOT), ENT_QUOTES)!!}"></live-room>
                 </div>
             </div>
 

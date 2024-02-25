@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Models\Message;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,5 +21,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('/sendMessage', function (Request $request) {
     event(new App\Events\MyEvent($request->message));
+    Message::create([
+        'ip' => $request->ip(),
+        'message' => $request->message
+    ]);
     return response('success', 201);
 });
