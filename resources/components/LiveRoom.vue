@@ -5,7 +5,9 @@
         {{ message.message }}
       </li>
     </ul>
+     <div class="ms-2">Online: {{subscription_count}}</div>
     <div class="input-group has-validation" :class="error?'was-validated':''">
+      
       <input type="text" name="message" v-model="txt" class="form-control " placeholder="Message" aria-label="Message"
         aria-describedby="button-send" @input="error=false" required>
       <button type="button" class="btn btn-outline-secondary" @click="sendMessage" id="button-send">Send ({{countClick}})</button>
@@ -28,6 +30,7 @@ const messages = ref(props.archiveMessages);
 const txt = ref('')
 const scrollToMe = ref(null);
 const error = ref(false);
+const subscription_count = ref(0);
 
 var timer;
 const countClick =  ref(0);
@@ -46,6 +49,10 @@ channel.bind('message', async function (data) {
     await nextTick()
     scrollToMe.value.scrollTop= scrollToMe.value.scrollHeight;
   }
+});
+
+channel.bind('pusher:subscription_count', (data) => {
+  subscription_count.value = data.subscription_count;
 });
 
 function sendMessage() {

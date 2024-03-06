@@ -1,60 +1,17 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <title>{{ config('app.name', 'Laravel') }}</title>
-
-    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
-
-</head>
-
-<body>
-    <header>
-        <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="{{ url('/') }}">Showroom</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
-                    aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarCollapse">
-                    <ul class="navbar-nav me-auto mb-2 mb-md-0">
-                        @if (Route::has('login'))
-                            @auth
-                                <li class="nav-item">
-                                    <a class="nav-link active" aria-current="page" href="{{ url('/home') }}">Dashboard</a>
-                                </li>
-                            @else
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('login') }}">Log in</a>
-                                </li>
-                                @if (Route::has('register'))
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{{ route('register') }}">Register</a>
-                                    </li>
-                                @endif
-                            @endauth
-                        @endif
-                    </ul>
-                    <div class="d-flex">
-
-                    </div>
-                </div>
-            </div>
-        </nav>
-    </header>
-
-    <main id="app">
-
-        <div id="myCarousel" class="carousel slide" data-bs-ride="carousel">
+@extends('layouts.default')
+@section('styles')
+    @vite(['resources/sass/app.scss'])
+@endsection
+@section('sripts')
+    @vite(['resources/js/app.js'])
+@endsection
+@section('content')
+        <div id="Carousel" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-indicators">
-                <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="active"
+                <button type="button" data-bs-target="#Carousel" data-bs-slide-to="0" class="active"
                     aria-current="true" aria-label="Slide 1"></button>
-                <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                <button type="button" data-bs-target="#Carousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#Carousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
             </div>
             <div class="carousel-inner">
                 <div class="carousel-item active">
@@ -104,11 +61,11 @@
                     </div>
                 </div>
             </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
+            <button class="carousel-control-prev" type="button" data-bs-target="#Carousel" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Previous</span>
             </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
+            <button class="carousel-control-next" type="button" data-bs-target="#Carousel" data-bs-slide="next">
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Next</span>
             </button>
@@ -120,8 +77,8 @@
                 </div>
             </div>
             <!-- Three columns of text below the carousel -->
-            <div class="row" v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }">
-                <div class="col-lg-4 text-center">
+            <div class="row">
+                <div class="col-lg-4 text-center" v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }">
                     <svg width="140" height="140" viewBox="0 0 50 52" xmlns="http://www.w3.org/2000/svg">
                         <title>Logomark</title>
                         <path
@@ -134,7 +91,7 @@
                         with expressive, elegant syntax.</p>
                     <p><a class="btn btn-secondary" href="https://laravel.com/">View details &raquo;</a></p>
                 </div><!-- /.col-lg-4 -->
-                <div class="col-lg-4 text-center">
+                <div class="col-lg-4 text-center" v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }">
                     <svg class="logo" viewBox="0 0 128 128" width="140" height="140" data-v-e9cb7cd5="">
                         <path fill="#42b883" d="M78.8,10L64,35.4L49.2,10H0l64,110l64-110C128,10,78.8,10,78.8,10z"
                             data-v-e9cb7cd5=""></path>
@@ -147,7 +104,7 @@
                         versatile framework for building web user interfaces.</p>
                     <p><a class="btn btn-secondary" href="https://vuejs.org/">View details &raquo;</a></p>
                 </div><!-- /.col-lg-4 -->
-                <div class="col-lg-4 text-center">
+                <div class="col-lg-4 text-center" v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }">
                     <svg width="140" height="140" fill="none" stroke-linecap="square"
                         stroke-miterlimit="10" version="1.1" viewBox="0 0 226.77 226.77"
                         xmlns="http://www.w3.org/2000/svg">
@@ -168,8 +125,8 @@
                     <p><a class="btn btn-secondary" href="https://threejs.org/">View details &raquo;</a></p>
                 </div><!-- /.col-lg-4 -->
             </div><!-- /.row -->
-            <div class="row" v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }">
-                <div class="col-lg-4 text-center">
+            <div class="row">
+                <div class="col-lg-4 text-center" v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }">
                     <svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 118 94"
                         role="img">
                         <title>Bootstrap</title>
@@ -182,7 +139,7 @@
                         feature-packed frontend toolkit.</p>
                     <p><a class="btn btn-secondary" href="https://threejs.org/">View details &raquo;</a></p>
                 </div><!-- /.col-lg-4 -->
-                <div class="col-lg-4 text-center">
+                <div class="col-lg-4 text-center" v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }">
                     <svg xmlns="http://www.w3.org/2000/svg" aria-label="Docker" role="img" viewBox="0 0 512 512"
                         width="140" height="140">
                         <rect rx="15%" fill="#ffffff" />
@@ -197,7 +154,7 @@
                         create, manage,and deliver your team's container applications.</p>
                     <p><a class="btn btn-secondary" href="https://hub.docker.com/">View details &raquo;</a></p>
                 </div><!-- /.col-lg-4 -->
-                <div class="col-lg-4 text-center">
+                <div class="col-lg-4 text-center" v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }">
                     <svg width="140" height="140" viewBox="0 0 410 404" fill="none"
                         xmlns="http://www.w3.org/2000/svg">
                         <path
@@ -285,15 +242,5 @@
             <hr class="featurette-divider">
             
             <!-- /END THE FEATURETTES -->
-
-        </div><!-- /.container -->
-
-        <!-- FOOTER -->
-        <footer class="container">
-            <p class="float-end"><a href="#">Back to top</a></p>
-            <p>For the log is long, and full off erors.</p>
-        </footer>
-    </main>
-</body>
-
-</html>
+            </div><!-- /.container -->
+@endsection
