@@ -3,6 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use App\Models\Message;
 use App\Http\Controllers\ShopController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\RoleController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -25,6 +28,13 @@ Route::get('shop/product/{id}', [ShopController::class,'product'])->name('shop.p
 Route::get('shop/basket', [ShopController::class,'basket'])->name('shop.basket');
 Route::get('shop/checkout', [ShopController::class,'checkout'])->name('shop.checkout');
 
-Auth::routes();
+Auth::routes(['register' => false]);
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::middleware('auth')->group(function () {
+    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+    // Our resource routes
+    Route::resource('roles', RoleController::class);
+    Route::resource('users', UserController::class);
+    Route::resource('products', ProductController::class);
+});

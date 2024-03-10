@@ -16,7 +16,7 @@
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
-<body>
+<body style="padding-top:0">
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
@@ -30,7 +30,9 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
-
+                        <li class="nav-item">
+                                    <a class="nav-link" aria-current="page" href="{{ url('/home') }}">Dashboard</a>
+                                </li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -49,6 +51,9 @@
                                 </li>
                             @endif
                         @else
+                            <li><a class="nav-link" href="{{ route('users.index') }}">Manage Users</a></li>
+                            <li><a class="nav-link" href="{{ route('roles.index') }}">Manage Role</a></li>
+                            <li><a class="nav-link" href="{{ route('products.index') }}">Manage Product</a></li>
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }}
@@ -73,7 +78,9 @@
         </nav>
 
         <main class="py-4">
+         <div class="container bg-white p-4">
             @yield('content')
+        </div>
         </main>
     </div>
 </body>
