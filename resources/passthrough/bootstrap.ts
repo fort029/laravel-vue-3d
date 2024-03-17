@@ -114,6 +114,22 @@ const Bootstrap_PT: PrimeVuePTOptions = {
     content: { class: "modal-body" },
     closeButton: { class: "btn" },
   },
+  paginator:{
+    root: { class: "pagination border-top mt-5 pt-5 d-flex justify-content-between align-items-center"},
+    firstPageButton: { class: "page-link" },
+    previousPageButton:{ class: "page-link" },
+    nextPageButton:{ class: "page-link" },
+    lastPageButton:{ class: "page-link" },
+    pages:{ class: "d-flex" },
+    pageButton:{ class: "ms-1 page-link" },
+
+  },
+  dropdown:{
+    panel:{class:"dropdown-menu show"},
+    list:{class:"ps-0"},
+    item:{class:"dropdown-item fs-xs fw-bold text-uppercase text-muted-hover mb-2"}
+  }
 };
+
 
 export default Bootstrap_PT;

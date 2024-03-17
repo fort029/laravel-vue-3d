@@ -13,12 +13,11 @@
                             data-aos="fade-up" data-aos-delay="1000">Where will your next project take you?</h1>
                         <div data-aos="fade-in" data-aos-delay="2000">
                             <div class="d-md-flex justify-content-center mt-4 mb-3 my-md-5">
-                                <a href="{{route('shop.category')}}"
+                                @foreach ( App\Models\Product::getCategorys() as $group)
+                                <a href="{{route('shop.category_group', $group->category)}}"
                                     class="btn btn-skew-left btn-orange btn-orange-chunky text-white mx-1 w-100 w-md-auto mb-2 mb-md-0"><span>Shop
-                                        Menswear <i class="ri-arrow-right-line align-middle fw-bold"></i></span></a>
-                                <a href="{{route('shop.category')}}"
-                                    class="btn btn-skew-left btn-orange btn-orange-chunky text-white mx-1 w-100 w-md-auto mb-2 mb-md-0"><span>Shop
-                                        Womenswear <i class="ri-arrow-right-line align-middle fw-bold"></i></span></a>
+                                        {{$group->category}} <i class="ri-arrow-right-line align-middle fw-bold"></i></span></a>
+                                @endforeach
                             </div>
                             <i class="ri-mouse-line d-block text-center animation-float ri-2x transition-all opacity-50-hover text-white"
                                 data-pixr-scrollto data-target=".brand-section" data-aos="fade-up"
@@ -100,374 +99,87 @@
                     }
                   }'>
                   <div class="swiper-wrapper pb-5 pe-1">
+                    @foreach ( App\Models\Product::inRandomOrder()->limit(5)->get() as $product)
                       <div class="swiper-slide d-flex h-auto">
                         <!-- Card Product-->
                         <div class="card position-relative h-100 card-listing hover-trigger">
+                            @if($product->discount)
+                                <span class="badge card-badge bg-secondary">-{{$product->discount}}%</span>
+                            @endif
                             <div class="card-header">
                                 <picture class="position-relative overflow-hidden d-block bg-light">
-                                    <img class="w-100 img-fluid position-relative z-index-10" title="" src="/assets/images/products/product-1.jpg" alt="">
+                                    <img class="w-100 img-fluid position-relative z-index-10" title="" src="{{$product->img}}" alt="">
                                 </picture>
                                     <picture class="position-absolute z-index-20 start-0 top-0 hover-show bg-light">
-                                        <img class="w-100 img-fluid" title="" src="/assets/images/products/product-1b.jpg" alt="">
+                                        <img class="w-100 img-fluid" title="" src="{{$product->img}}" alt="">
                                     </picture>
                                 <div class="card-actions">
-                                    <span class="small text-uppercase tracking-wide fw-bolder text-center d-block">Quick Add</span>
-                                    <div class="d-flex justify-content-center align-items-center flex-wrap mt-3">
-                                        <button class="btn btn-outline-dark btn-sm mx-2">S</button>
-                                        <button class="btn btn-outline-dark btn-sm mx-2">M</button>
-                                        <button class="btn btn-outline-dark btn-sm mx-2">L</button>
-                                    </div>
+                                    <span class="small text-uppercase tracking-wide fw-bolder text-center d-block">Show</span>
+                                    @if(isset($product->options_decode->size))
+                                        <span class="small text-uppercase tracking-wide fw-bolder text-center d-block">
+                                            Available size
+                                        </span>
+                                        <div class="d-flex justify-content-center align-items-center flex-wrap mt-3">
+                                            @foreach ( $product->options_decode->size as $size )
+                                                <button class="btn btn-outline-dark btn-sm mx-2">{{ $size }}</button>
+                                            @endforeach
+                                        </div>
+                                    @elseif(isset($product->options_decode->color))
+                                        <span class="small text-uppercase tracking-wide fw-bolder text-center d-block">
+                                            Available color
+                                        </span>
+                                        <div class="d-flex justify-content-center align-items-center flex-wrap mt-3">
+                                            @foreach ( $product->options_decode->color as $color )
+                                                <button class="btn btn-outline-dark btn-sm mx-2">{{ $color }}</button>
+                                            @endforeach
+                                        </div>
+                                    @elseif(isset($product->options_decode->variant))
+                                        <span class="small text-uppercase tracking-wide fw-bolder text-center d-block">
+                                            Available variant
+                                        </span>
+                                        <div class="d-flex justify-content-center align-items-center flex-wrap mt-3">
+                                            @foreach ( $product->options_decode->variant as $variant )
+                                                <button class="btn btn-outline-dark btn-sm mx-2">{{ $variant }}</button>
+                                            @endforeach
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                             <div class="card-body px-0 text-center">
                                 <div class="d-flex justify-content-center align-items-center mx-auto mb-1">
                                     <!-- Review Stars Small-->
-                        <div class="rating position-relative d-table">
-                            <div class="position-absolute stars" style="width: 90%">
-                                <i class="ri-star-fill text-dark mr-1"></i>
-                                <i class="ri-star-fill text-dark mr-1"></i>
-                                <i class="ri-star-fill text-dark mr-1"></i>
-                                <i class="ri-star-fill text-dark mr-1"></i>
-                                <i class="ri-star-fill text-dark mr-1"></i>
-                            </div>
-                            <div class="stars">
-                                <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                            </div>
-                        </div> <span class="small fw-bolder ms-2 text-muted"> 4.7 (456)</span>
+                                    <div class="rating position-relative d-table">
+                                        <div class="position-absolute stars" style="{{$product->rating * 100 / 5}}">
+                                            <i class="ri-star-fill text-dark mr-1"></i>
+                                            <i class="ri-star-fill text-dark mr-1"></i>
+                                            <i class="ri-star-fill text-dark mr-1"></i>
+                                            <i class="ri-star-fill text-dark mr-1"></i>
+                                            <i class="ri-star-fill text-dark mr-1"></i>
+                                        </div>
+                                        <div class="stars">
+                                            <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
+                                            <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
+                                            <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
+                                            <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
+                                            <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
+                                        </div>
+                                    </div> 
+                                    <span class="small fw-bolder ms-2 text-muted"> {{$product->rating}} ({{$product->rating_count}})</span>
                                 </div>
                                 <a class="mb-0 mx-2 mx-md-4 fs-p link-cover text-decoration-none d-block text-center"
-                                    href="./product.html">Full Zip Hoodie</a>
-                                    <p class="fw-bolder m-0 mt-2">$1129.99</p>
+                                    href="{{route('shop.product',$product->id)}}">{{$product->name}}</a>
+                                    <p class="mb-0 me-2 text-danger fw-bolder">$<span>{{ $product->price_discount }}</span></p>
+                                    @if($product->discount)
+                                    <p  class="mb-0 text-muted fw-bolder"><s>$<span>{{ $product->price }}</span></s></p>
+                                    @endif
+
                             </div>
                         </div>
                         <!--/ Card Product-->
                       </div>
-                      <div class="swiper-slide d-flex h-auto">
-                        <!-- Card Product-->
-                        <div class="card position-relative h-100 card-listing hover-trigger">
-                                <span class="badge card-badge bg-secondary">-25%</span>
-                            <div class="card-header">
-                                <picture class="position-relative overflow-hidden d-block bg-light">
-                                    <img class="w-100 img-fluid position-relative z-index-10" title="" src="/assets/images/products/product-2.jpg" alt="">
-                                </picture>
-                                <div class="card-actions">
-                                    <span class="small text-uppercase tracking-wide fw-bolder text-center d-block">Quick Add</span>
-                                    <div class="d-flex justify-content-center align-items-center flex-wrap mt-3">
-                                        <button class="btn btn-outline-dark btn-sm mx-2">S</button>
-                                        <button class="btn btn-outline-dark btn-sm mx-2">M</button>
-                                        <button class="btn btn-outline-dark btn-sm mx-2">L</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-body px-0 text-center">
-                                <div class="d-flex justify-content-center align-items-center mx-auto mb-1">
-                                    <!-- Review Stars Small-->
-                        <div class="rating position-relative d-table">
-                            <div class="position-absolute stars" style="width: 60%">
-                                <i class="ri-star-fill text-dark mr-1"></i>
-                                <i class="ri-star-fill text-dark mr-1"></i>
-                                <i class="ri-star-fill text-dark mr-1"></i>
-                                <i class="ri-star-fill text-dark mr-1"></i>
-                                <i class="ri-star-fill text-dark mr-1"></i>
-                            </div>
-                            <div class="stars">
-                                <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                            </div>
-                        </div> <span class="small fw-bolder ms-2 text-muted"> 4.4 (1289)</span>
-                                </div>
-                                <a class="mb-0 mx-2 mx-md-4 fs-p link-cover text-decoration-none d-block text-center"
-                                    href="./product.html">Mens Sherpa Hoodie</a>
-                                    <div class="d-flex justify-content-center align-items-center mt-2">
-                                        <p class="mb-0 me-2 text-danger fw-bolder">$<span>599.55</span></p>
-                                        <p class="mb-0 text-muted fw-bolder"><s>$<span>150.00</span></s></p>
-                                    </div>
-                            </div>
-                        </div>
-                        <!--/ Card Product-->
-                      </div>
-                      <div class="swiper-slide d-flex h-auto">
-                        <!-- Card Product-->
-                        <div class="card position-relative h-100 card-listing hover-trigger">
-                                <span class="badge card-badge bg-secondary">-65%</span>
-                            <div class="card-header">
-                                <picture class="position-relative overflow-hidden d-block bg-light">
-                                    <img class="w-100 img-fluid position-relative z-index-10" title="" src="/assets/images/products/product-3.jpg" alt="">
-                                </picture>
-                                <div class="card-actions">
-                                    <span class="small text-uppercase tracking-wide fw-bolder text-center d-block">Quick Add</span>
-                                    <div class="d-flex justify-content-center align-items-center flex-wrap mt-3">
-                                        <button class="btn btn-outline-dark btn-sm mx-2">S</button>
-                                        <button class="btn btn-outline-dark btn-sm mx-2">M</button>
-                                        <button class="btn btn-outline-dark btn-sm mx-2">L</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-body px-0 text-center">
-                                <div class="d-flex justify-content-center align-items-center mx-auto mb-1">
-                                    <!-- Review Stars Small-->
-                        <div class="rating position-relative d-table">
-                            <div class="position-absolute stars" style="width: 20%">
-                                <i class="ri-star-fill text-dark mr-1"></i>
-                                <i class="ri-star-fill text-dark mr-1"></i>
-                                <i class="ri-star-fill text-dark mr-1"></i>
-                                <i class="ri-star-fill text-dark mr-1"></i>
-                                <i class="ri-star-fill text-dark mr-1"></i>
-                            </div>
-                            <div class="stars">
-                                <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                            </div>
-                        </div> <span class="small fw-bolder ms-2 text-muted"> 4.7 (754)</span>
-                                </div>
-                                <a class="mb-0 mx-2 mx-md-4 fs-p link-cover text-decoration-none d-block text-center"
-                                    href="./product.html">Womens Essentials Hoodie</a>
-                                    <div class="d-flex justify-content-center align-items-center mt-2">
-                                        <p class="mb-0 me-2 text-danger fw-bolder">$<span>779.55</span></p>
-                                        <p class="mb-0 text-muted fw-bolder"><s>$<span>1100.00</span></s></p>
-                                    </div>
-                            </div>
-                        </div>
-                        <!--/ Card Product-->
-                      </div>
-                      <div class="swiper-slide d-flex h-auto">
-                        <!-- Card Product-->
-                        <div class="card position-relative h-100 card-listing hover-trigger">
-                            <div class="card-header">
-                                <picture class="position-relative overflow-hidden d-block bg-light">
-                                    <img class="w-100 img-fluid position-relative z-index-10" title="" src="/assets/images/products/product-4.jpg" alt="">
-                                </picture>
-                                <div class="card-actions">
-                                    <span class="small text-uppercase tracking-wide fw-bolder text-center d-block">Quick Add</span>
-                                    <div class="d-flex justify-content-center align-items-center flex-wrap mt-3">
-                                        <button class="btn btn-outline-dark btn-sm mx-2">S</button>
-                                        <button class="btn btn-outline-dark btn-sm mx-2">M</button>
-                                        <button class="btn btn-outline-dark btn-sm mx-2">L</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-body px-0 text-center">
-                                <div class="d-flex justify-content-center align-items-center mx-auto mb-1">
-                                    <!-- Review Stars Small-->
-                        <div class="rating position-relative d-table">
-                            <div class="position-absolute stars" style="width: 70%">
-                                <i class="ri-star-fill text-dark mr-1"></i>
-                                <i class="ri-star-fill text-dark mr-1"></i>
-                                <i class="ri-star-fill text-dark mr-1"></i>
-                                <i class="ri-star-fill text-dark mr-1"></i>
-                                <i class="ri-star-fill text-dark mr-1"></i>
-                            </div>
-                            <div class="stars">
-                                <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                            </div>
-                        </div> <span class="small fw-bolder ms-2 text-muted"> 4.4 (1289)</span>
-                                </div>
-                                <a class="mb-0 mx-2 mx-md-4 fs-p link-cover text-decoration-none d-block text-center"
-                                    href="./product.html">Elevated Lined Hoodie</a>
-                                    <p class="fw-bolder m-0 mt-2">$1829.99</p>
-                            </div>
-                        </div>
-                        <!--/ Card Product-->
-                      </div>
-                      <div class="swiper-slide d-flex h-auto">
-                        <!-- Card Product-->
-                        <div class="card position-relative h-100 card-listing hover-trigger">
-                            <div class="card-header">
-                                <picture class="position-relative overflow-hidden d-block bg-light">
-                                    <img class="w-100 img-fluid position-relative z-index-10" title="" src="/assets/images/products/product-5.jpg" alt="">
-                                </picture>
-                                    <picture class="position-absolute z-index-20 start-0 top-0 hover-show bg-light">
-                                        <img class="w-100 img-fluid" title="" src="/assets/images/products/product-5b.jpg" alt="">
-                                    </picture>
-                                <div class="card-actions">
-                                    <span class="small text-uppercase tracking-wide fw-bolder text-center d-block">Quick Add</span>
-                                    <div class="d-flex justify-content-center align-items-center flex-wrap mt-3">
-                                        <button class="btn btn-outline-dark btn-sm mx-2">S</button>
-                                        <button class="btn btn-outline-dark btn-sm mx-2">M</button>
-                                        <button class="btn btn-outline-dark btn-sm mx-2">L</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-body px-0 text-center">
-                                <div class="d-flex justify-content-center align-items-center mx-auto mb-1">
-                                    <!-- Review Stars Small-->
-                        <div class="rating position-relative d-table">
-                            <div class="position-absolute stars" style="width: 84%">
-                                <i class="ri-star-fill text-dark mr-1"></i>
-                                <i class="ri-star-fill text-dark mr-1"></i>
-                                <i class="ri-star-fill text-dark mr-1"></i>
-                                <i class="ri-star-fill text-dark mr-1"></i>
-                                <i class="ri-star-fill text-dark mr-1"></i>
-                            </div>
-                            <div class="stars">
-                                <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                            </div>
-                        </div> <span class="small fw-bolder ms-2 text-muted"> 4.8 (189)</span>
-                                </div>
-                                <a class="mb-0 mx-2 mx-md-4 fs-p link-cover text-decoration-none d-block text-center"
-                                    href="./product.html">Mens Slab Hoodie</a>
-                                    <p class="fw-bolder m-0 mt-2">$29.99</p>
-                            </div>
-                        </div>
-                        <!--/ Card Product-->
-                      </div>
-                      <div class="swiper-slide d-flex h-auto">
-                        <!-- Card Product-->
-                        <div class="card position-relative h-100 card-listing hover-trigger">
-                            <div class="card-header">
-                                <picture class="position-relative overflow-hidden d-block bg-light">
-                                    <img class="w-100 img-fluid position-relative z-index-10" title="" src="/assets/images/products/product-6.jpg" alt="">
-                                </picture>
-                                <div class="card-actions">
-                                    <span class="small text-uppercase tracking-wide fw-bolder text-center d-block">Quick Add</span>
-                                    <div class="d-flex justify-content-center align-items-center flex-wrap mt-3">
-                                        <button class="btn btn-outline-dark btn-sm mx-2">S</button>
-                                        <button class="btn btn-outline-dark btn-sm mx-2">M</button>
-                                        <button class="btn btn-outline-dark btn-sm mx-2">L</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-body px-0 text-center">
-                                <div class="d-flex justify-content-center align-items-center mx-auto mb-1">
-                                    <!-- Review Stars Small-->
-                        <div class="rating position-relative d-table">
-                            <div class="position-absolute stars" style="width: 60%">
-                                <i class="ri-star-fill text-dark mr-1"></i>
-                                <i class="ri-star-fill text-dark mr-1"></i>
-                                <i class="ri-star-fill text-dark mr-1"></i>
-                                <i class="ri-star-fill text-dark mr-1"></i>
-                                <i class="ri-star-fill text-dark mr-1"></i>
-                            </div>
-                            <div class="stars">
-                                <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                            </div>
-                        </div> <span class="small fw-bolder ms-2 text-muted"> 4.5 (1567)</span>
-                                </div>
-                                <a class="mb-0 mx-2 mx-md-4 fs-p link-cover text-decoration-none d-block text-center"
-                                    href="./product.html">Blocked Striped Hoodie</a>
-                                    <p class="fw-bolder m-0 mt-2">$1329.99</p>
-                            </div>
-                        </div>
-                        <!--/ Card Product-->
-                      </div>
-                      <div class="swiper-slide d-flex h-auto">
-                        <!-- Card Product-->
-                        <div class="card position-relative h-100 card-listing hover-trigger">
-                                <span class="badge card-badge bg-secondary">-13%</span>
-                            <div class="card-header">
-                                <picture class="position-relative overflow-hidden d-block bg-light">
-                                    <img class="w-100 img-fluid position-relative z-index-10" title="" src="/assets/images/products/product-7.jpg" alt="">
-                                </picture>
-                                <div class="card-actions">
-                                    <span class="small text-uppercase tracking-wide fw-bolder text-center d-block">Quick Add</span>
-                                    <div class="d-flex justify-content-center align-items-center flex-wrap mt-3">
-                                        <button class="btn btn-outline-dark btn-sm mx-2">S</button>
-                                        <button class="btn btn-outline-dark btn-sm mx-2">M</button>
-                                        <button class="btn btn-outline-dark btn-sm mx-2">L</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-body px-0 text-center">
-                                <div class="d-flex justify-content-center align-items-center mx-auto mb-1">
-                                    <!-- Review Stars Small-->
-                        <div class="rating position-relative d-table">
-                            <div class="position-absolute stars" style="width: 60%">
-                                <i class="ri-star-fill text-dark mr-1"></i>
-                                <i class="ri-star-fill text-dark mr-1"></i>
-                                <i class="ri-star-fill text-dark mr-1"></i>
-                                <i class="ri-star-fill text-dark mr-1"></i>
-                                <i class="ri-star-fill text-dark mr-1"></i>
-                            </div>
-                            <div class="stars">
-                                <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                            </div>
-                        </div> <span class="small fw-bolder ms-2 text-muted"> 4.4 (1289)</span>
-                                </div>
-                                <a class="mb-0 mx-2 mx-md-4 fs-p link-cover text-decoration-none d-block text-center"
-                                    href="./product.html">Womens Classic Hoodie</a>
-                                    <div class="d-flex justify-content-center align-items-center mt-2">
-                                        <p class="mb-0 me-2 text-danger fw-bolder">$<span>599.55</span></p>
-                                        <p class="mb-0 text-muted fw-bolder"><s>$<span>150.00</span></s></p>
-                                    </div>
-                            </div>
-                        </div>
-                        <!--/ Card Product-->
-                      </div>
-                      <div class="swiper-slide d-flex h-auto">
-                        <!-- Card Product-->
-                        <div class="card position-relative h-100 card-listing hover-trigger">
-                                <span class="badge card-badge bg-secondary">-33%</span>
-                            <div class="card-header">
-                                <picture class="position-relative overflow-hidden d-block bg-light">
-                                    <img class="w-100 img-fluid position-relative z-index-10" title="" src="/assets/images/products/product-8.jpg" alt="">
-                                </picture>
-                                <div class="card-actions">
-                                    <span class="small text-uppercase tracking-wide fw-bolder text-center d-block">Quick Add</span>
-                                    <div class="d-flex justify-content-center align-items-center flex-wrap mt-3">
-                                        <button class="btn btn-outline-dark btn-sm mx-2">S</button>
-                                        <button class="btn btn-outline-dark btn-sm mx-2">M</button>
-                                        <button class="btn btn-outline-dark btn-sm mx-2">L</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-body px-0 text-center">
-                                <div class="d-flex justify-content-center align-items-center mx-auto mb-1">
-                                    <!-- Review Stars Small-->
-                        <div class="rating position-relative d-table">
-                            <div class="position-absolute stars" style="width: 20%">
-                                <i class="ri-star-fill text-dark mr-1"></i>
-                                <i class="ri-star-fill text-dark mr-1"></i>
-                                <i class="ri-star-fill text-dark mr-1"></i>
-                                <i class="ri-star-fill text-dark mr-1"></i>
-                                <i class="ri-star-fill text-dark mr-1"></i>
-                            </div>
-                            <div class="stars">
-                                <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                            </div>
-                        </div> <span class="small fw-bolder ms-2 text-muted"> 4.7 (754)</span>
-                                </div>
-                                <a class="mb-0 mx-2 mx-md-4 fs-p link-cover text-decoration-none d-block text-center"
-                                    href="./product.html">Mens Sherpa Hoodie</a>
-                                    <div class="d-flex justify-content-center align-items-center mt-2">
-                                        <p class="mb-0 me-2 text-danger fw-bolder">$<span>779.55</span></p>
-                                        <p class="mb-0 text-muted fw-bolder"><s>$<span>1100.00</span></s></p>
-                                    </div>
-                            </div>
-                        </div>
-                        <!--/ Card Product-->
-                      </div>
+                     @endforeach
                     <div class="swiper-slide d-flex h-auto justify-content-center align-items-center">
-                      <a href="./category.html" class="d-flex text-decoration-none flex-column justify-content-center align-items-center">
+                      <a href="{{route('shop.category')}}" class="d-flex text-decoration-none flex-column justify-content-center align-items-center">
                         <span class="btn btn-dark btn-icon mb-3"><i class="ri-arrow-right-line ri-lg lh-1"></i></span>
                         <span class="lead fw-bolder">See All</span>
                       </a>
@@ -505,22 +217,13 @@
                     "trigger": "mouseenter"
                 }'>
                 </div>
-                <div class="hotspot d-none d-lg-block" data-options='{
-                    "placement": {
-                        "left": "53%",
-                        "top": "40%"
-                    },
-                    "alwaysVisible": true,
-                    "alwaysAnimate": true,
-                    "contentTarget": "#hotspot-one"
-                }'>
-                </div>
+                
                 <div class="container py-lg-8 position-relative z-index-10 d-flex align-items-center" data-aos="fade-left">
                     <div class="py-8 d-flex justify-content-end align-items-start align-items-lg-end flex-column col-lg-4 text-lg-end">
                         <p class="small fw-bolder text-uppercase tracking-wider mb-2 text-muted">Extreme Performance</p>
                         <h2 class="display-5 fw-bold mb-3">The North Face</h2>
-                        <p class="lead d-none d-lg-block">Be ready all year round with our selection of North Face outdoor jackets — perfect for any time of the year and year round. Choose from a variety of colour shades and styles to warm you up in cold conditions.</p>
-                        <a class="text-decoration-none fw-bolder" href="#">Shop The North Face &rarr;</a>
+                        <p class="lead d-none d-lg-block">Be ready. Get unique products from "The North Face" series and be ready for the extreme challenges that tomorrow will bring.</p>
+                        <a class="text-decoration-none fw-bolder" href="{{route('shop.category')}}">Let's go &rarr;</a>
                     </div>
                 </div>
             
@@ -529,32 +232,8 @@
                     <div class="m-n2 rounded overflow-hidden">
                         <div class="mb-1 bg-light d-flex justify-content-center">
                             <div class="f-w-48 px-3 pt-3">
-                                <img class="img-fluid" src="/assets/images/products/product-3.jpg" alt="Bootstrap 5 Template by Pixel Rocket">
+                                <img class="img-fluid" src="/assets/images/products/TheNorthFace.jpg" alt="">
                             </div>
-                        </div>
-                        <div class="px-4 py-4 text-center">
-                            <div class="d-flex justify-content-center align-items-center mx-auto mb-1">
-                                <!-- Review Stars Small-->
-            <div class="rating position-relative d-table">
-                <div class="position-absolute stars" style="width: 80%">
-                    <i class="ri-star-fill text-dark mr-1"></i>
-                    <i class="ri-star-fill text-dark mr-1"></i>
-                    <i class="ri-star-fill text-dark mr-1"></i>
-                    <i class="ri-star-fill text-dark mr-1"></i>
-                    <i class="ri-star-fill text-dark mr-1"></i>
-                </div>
-                <div class="stars">
-                    <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                    <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                    <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                    <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                    <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                </div>
-            </div> <span class="small fw-bolder ms-2 text-muted"> 4.4 (1289)</span>
-                            </div>
-                            <p class="mb-0 mx-4">Pusher Outdoor Jeans Black Women</p>
-                            <p class="lead lh-1 m-0 fw-bolder mt-2 mb-3">$199.87</p>
-                            <a href="./product.html" class="fw-bolder text-link-border pb-1 fs-6">Full details <i class="ri-arrow-right-line align-bottom"></i></a>
                         </div>
                     </div>
                 </div>
@@ -565,744 +244,6 @@
                 <svg class="align-self-end d-flex" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1283 53.25"><polygon fill="currentColor" points="0 53.25 1283 53.25 1283 0 0 53.25"/></svg></div>
             <!-- /SVG Shape Divider-->        </section>
         <!-- / Image Hotspot Banner-->
-
-
-
-        <!-- Linked Product Carousels-->
-        <section class="py-5" data-aos="fade-in">
-            <div class="container">
-                <div class="row g-5">
-                    <div class="col-12 col-md-7" data-aos="fade-right">
-                        <div class="m-0">
-                            <p class="small fw-bolder text-uppercase tracking-wider mb-2 text-muted">Hiking Essentials
-                            </p>
-                            <h2 class="display-5 fw-bold mb-6">Our Latest Must-Have Products</h2>
-                            <div class="px-8 position-relative">
-
-                                <!-- Swiper-->
-                                <div class="swiper-container swiper-linked-carousel-small">
-                                
-                                    <!-- Add Pagination -->
-                                    <div class="swiper-pagination-blocks mb-4">
-                                        <div class="swiper-pagination-custom"></div>
-                                    </div>
-                                
-                                    <div class="swiper-wrapper">
-                                
-                                        <!-- Swiper Slide-->
-                                        <div class="swiper-slide overflow-hidden">
-                                            <!-- Card-->
-                                            <!-- Card Product-->
-                                            <div class="card position-relative h-100 card-listing hover-trigger">
-                                                <div class="card-header">
-                                                    <picture class="position-relative overflow-hidden d-block bg-light">
-                                                        <img class="w-100 img-fluid position-relative z-index-10" title="" src="/assets/images/products/product-12.jpg" alt="Bootstrap 5 Template by Pixel Rocket">
-                                                    </picture>
-                                                    <div class="card-actions">
-                                                        <span class="small text-uppercase tracking-wide fw-bolder text-center d-block">Quick Add</span>
-                                                        <div class="d-flex justify-content-center align-items-center flex-wrap mt-3">
-                                                            <button class="btn btn-outline-dark btn-sm mx-2">S</button>
-                                                            <button class="btn btn-outline-dark btn-sm mx-2">M</button>
-                                                            <button class="btn btn-outline-dark btn-sm mx-2">L</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="card-body px-0 text-center">
-                                                    <div class="d-flex justify-content-center align-items-center mx-auto mb-1">
-                                                        <!-- Review Stars Small-->
-                                            <div class="rating position-relative d-table">
-                                                <div class="position-absolute stars" style="width: 80%">
-                                                    <i class="ri-star-fill text-dark mr-1"></i>
-                                                    <i class="ri-star-fill text-dark mr-1"></i>
-                                                    <i class="ri-star-fill text-dark mr-1"></i>
-                                                    <i class="ri-star-fill text-dark mr-1"></i>
-                                                    <i class="ri-star-fill text-dark mr-1"></i>
-                                                </div>
-                                                <div class="stars">
-                                                    <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                    <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                    <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                    <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                    <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                </div>
-                                            </div> <span class="small fw-bolder ms-2 text-muted"> 4.7 (1669)</span>
-                                                    </div>
-                                                    <a class="mb-0 mx-2 mx-md-4 fs-p link-cover text-decoration-none d-block text-center"
-                                                        href="./product.html">Mens Outdoors T-Shirt</a>
-                                                        <p class="fw-bolder m-0 mt-2">$1699.87</p>
-                                                </div>
-                                            </div>
-                                            <!--/ Card Product-->
-                                            <!--/ Card-->
-                                        </div>
-                                        <!-- / Swiper Slide-->
-                                
-                                        <!-- Swiper Slide-->
-                                        <div class="swiper-slide overflow-hidden">
-                                            <!-- Card-->
-                                            <!-- Card Product-->
-                                            <div class="card position-relative h-100 card-listing hover-trigger">
-                                                <div class="card-header">
-                                                    <picture class="position-relative overflow-hidden d-block bg-light">
-                                                        <img class="w-100 img-fluid position-relative z-index-10" title="" src="/assets/images/products/product-1.jpg" alt="Bootstrap 5 Template by Pixel Rocket">
-                                                    </picture>
-                                                    <div class="card-actions">
-                                                        <span class="small text-uppercase tracking-wide fw-bolder text-center d-block">Quick Add</span>
-                                                        <div class="d-flex justify-content-center align-items-center flex-wrap mt-3">
-                                                            <button class="btn btn-outline-dark btn-sm mx-2">S</button>
-                                                            <button class="btn btn-outline-dark btn-sm mx-2">M</button>
-                                                            <button class="btn btn-outline-dark btn-sm mx-2">L</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="card-body px-0 text-center">
-                                                    <div class="d-flex justify-content-center align-items-center mx-auto mb-1">
-                                                        <!-- Review Stars Small-->
-                                            <div class="rating position-relative d-table">
-                                                <div class="position-absolute stars" style="width: 80%">
-                                                    <i class="ri-star-fill text-dark mr-1"></i>
-                                                    <i class="ri-star-fill text-dark mr-1"></i>
-                                                    <i class="ri-star-fill text-dark mr-1"></i>
-                                                    <i class="ri-star-fill text-dark mr-1"></i>
-                                                    <i class="ri-star-fill text-dark mr-1"></i>
-                                                </div>
-                                                <div class="stars">
-                                                    <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                    <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                    <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                    <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                    <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                </div>
-                                            </div> <span class="small fw-bolder ms-2 text-muted"> 4.7 (1669)</span>
-                                                    </div>
-                                                    <a class="mb-0 mx-2 mx-md-4 fs-p link-cover text-decoration-none d-block text-center"
-                                                        href="./product.html">Mens Flyroam Sneakers</a>
-                                                        <p class="fw-bolder m-0 mt-2">$1699.87</p>
-                                                </div>
-                                            </div>
-                                            <!--/ Card Product-->
-                                            <!--/ Card-->
-                                        </div>
-                                        <!-- / Swiper Slide-->
-                                
-                                        <!-- Swiper Slide-->
-                                        <div class="swiper-slide overflow-hidden">
-                                            <!-- Card-->
-                                            <!-- Card Product-->
-                                            <div class="card position-relative h-100 card-listing hover-trigger">
-                                                <div class="card-header">
-                                                    <picture class="position-relative overflow-hidden d-block bg-light">
-                                                        <img class="w-100 img-fluid position-relative z-index-10" title="" src="/assets/images/products/product-13.jpg" alt="Bootstrap 5 Template by Pixel Rocket">
-                                                    </picture>
-                                                    <div class="card-actions">
-                                                        <span class="small text-uppercase tracking-wide fw-bolder text-center d-block">Quick Add</span>
-                                                        <div class="d-flex justify-content-center align-items-center flex-wrap mt-3">
-                                                            <button class="btn btn-outline-dark btn-sm mx-2">S</button>
-                                                            <button class="btn btn-outline-dark btn-sm mx-2">M</button>
-                                                            <button class="btn btn-outline-dark btn-sm mx-2">L</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="card-body px-0 text-center">
-                                                    <div class="d-flex justify-content-center align-items-center mx-auto mb-1">
-                                                        <!-- Review Stars Small-->
-                                            <div class="rating position-relative d-table">
-                                                <div class="position-absolute stars" style="width: 80%">
-                                                    <i class="ri-star-fill text-dark mr-1"></i>
-                                                    <i class="ri-star-fill text-dark mr-1"></i>
-                                                    <i class="ri-star-fill text-dark mr-1"></i>
-                                                    <i class="ri-star-fill text-dark mr-1"></i>
-                                                    <i class="ri-star-fill text-dark mr-1"></i>
-                                                </div>
-                                                <div class="stars">
-                                                    <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                    <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                    <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                    <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                    <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                </div>
-                                            </div> <span class="small fw-bolder ms-2 text-muted"> 4.7 (1669)</span>
-                                                    </div>
-                                                    <a class="mb-0 mx-2 mx-md-4 fs-p link-cover text-decoration-none d-block text-center"
-                                                        href="./product.html">Mens Flyroam Sneakers</a>
-                                                        <p class="fw-bolder m-0 mt-2">$1699.87</p>
-                                                </div>
-                                            </div>
-                                            <!--/ Card Product-->
-                                            <!--/ Card-->
-                                        </div>
-                                        <!-- / Swiper Slide-->
-                                
-                                    </div>
-                                </div>                                <!-- /Swiper-->
-
-                                <!-- Swiper Arrows -->
-                                <div
-                                    class="swiper-prev-linked position-absolute top-50 start-0 mt-n8 cursor-pointer transition-all opacity-50-hover">
-                                    <i class="ri-arrow-left-s-line ri-2x"></i></div>
-                                <div
-                                    class="swiper-next-linked position-absolute top-50 end-0 me-3 mt-n8 cursor-pointer transition-all opacity-50-hover">
-                                    <i class="ri-arrow-right-s-line ri-2x"></i></div>
-                                <!-- / Swiper Arrows-->
-
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-5 d-none d-md-flex" data-aos="fade-left">
-                        <div class="w-100 h-100">
-
-                            <!-- Swiper-->
-                            <div class="swiper-container h-100 swiper-linked-carousel-large">
-                            
-                                <div class="swiper-wrapper h-100">
-                            
-                                    <!-- Swiper Slide-->
-                                    <div class="swiper-slide">
-                                        <div class="row g-3">
-                                            <div class="col-12 col-md-6">
-                                                <!-- Card Product-->
-                                                <div class="card position-relative h-100 card-listing hover-trigger">
-                                                    <div class="card-header">
-                                                        <picture class="position-relative overflow-hidden d-block bg-light">
-                                                            <img class="w-100 img-fluid position-relative z-index-10" title="" src="/assets/images/products/product-13.jpg" alt="Bootstrap 5 Template by Pixel Rocket">
-                                                        </picture>
-                                                        <div class="card-actions">
-                                                            <span class="small text-uppercase tracking-wide fw-bolder text-center d-block">Quick Add</span>
-                                                            <div class="d-flex justify-content-center align-items-center flex-wrap mt-3">
-                                                                <button class="btn btn-outline-dark btn-sm mx-2">S</button>
-                                                                <button class="btn btn-outline-dark btn-sm mx-2">M</button>
-                                                                <button class="btn btn-outline-dark btn-sm mx-2">L</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="card-body px-0 text-center">
-                                                        <div class="d-flex justify-content-center align-items-center mx-auto mb-1">
-                                                            <!-- Review Stars Small-->
-                                                <div class="rating position-relative d-table">
-                                                    <div class="position-absolute stars" style="width: 80%">
-                                                        <i class="ri-star-fill text-dark mr-1"></i>
-                                                        <i class="ri-star-fill text-dark mr-1"></i>
-                                                        <i class="ri-star-fill text-dark mr-1"></i>
-                                                        <i class="ri-star-fill text-dark mr-1"></i>
-                                                        <i class="ri-star-fill text-dark mr-1"></i>
-                                                    </div>
-                                                    <div class="stars">
-                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                    </div>
-                                                </div> <span class="small fw-bolder ms-2 text-muted"> 4.7 (1669)</span>
-                                                        </div>
-                                                        <a class="mb-0 mx-2 mx-md-4 fs-p link-cover text-decoration-none d-block text-center"
-                                                            href="./product.html">Pocket Tee Rusty Red</a>
-                                                            <p class="fw-bolder m-0 mt-2">$1699.87</p>
-                                                    </div>
-                                                </div>
-                                                <!--/ Card Product-->
-                                            </div>
-                                            <div class="col-12 col-md-6">
-                                                <!-- Card Product-->
-                                                <div class="card position-relative h-100 card-listing hover-trigger">
-                                                    <div class="card-header">
-                                                        <picture class="position-relative overflow-hidden d-block bg-light">
-                                                            <img class="w-100 img-fluid position-relative z-index-10" title="" src="/assets/images/products/product-14.jpg" alt="Bootstrap 5 Template by Pixel Rocket">
-                                                        </picture>
-                                                        <div class="card-actions">
-                                                            <span class="small text-uppercase tracking-wide fw-bolder text-center d-block">Quick Add</span>
-                                                            <div class="d-flex justify-content-center align-items-center flex-wrap mt-3">
-                                                                <button class="btn btn-outline-dark btn-sm mx-2">S</button>
-                                                                <button class="btn btn-outline-dark btn-sm mx-2">M</button>
-                                                                <button class="btn btn-outline-dark btn-sm mx-2">L</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="card-body px-0 text-center">
-                                                        <div class="d-flex justify-content-center align-items-center mx-auto mb-1">
-                                                            <!-- Review Stars Small-->
-                                                <div class="rating position-relative d-table">
-                                                    <div class="position-absolute stars" style="width: 80%">
-                                                        <i class="ri-star-fill text-dark mr-1"></i>
-                                                        <i class="ri-star-fill text-dark mr-1"></i>
-                                                        <i class="ri-star-fill text-dark mr-1"></i>
-                                                        <i class="ri-star-fill text-dark mr-1"></i>
-                                                        <i class="ri-star-fill text-dark mr-1"></i>
-                                                    </div>
-                                                    <div class="stars">
-                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                    </div>
-                                                </div> <span class="small fw-bolder ms-2 text-muted"> 4.7 (1669)</span>
-                                                        </div>
-                                                        <a class="mb-0 mx-2 mx-md-4 fs-p link-cover text-decoration-none d-block text-center"
-                                                            href="./product.html">Mens T-Shirt Rusty</a>
-                                                            <p class="fw-bolder m-0 mt-2">$1699.87</p>
-                                                    </div>
-                                                </div>
-                                                <!--/ Card Product-->
-                                            </div>
-                                            <div class="col-12 col-md-6">
-                                                <!-- Card Product-->
-                                                <div class="card position-relative h-100 card-listing hover-trigger">
-                                                    <div class="card-header">
-                                                        <picture class="position-relative overflow-hidden d-block bg-light">
-                                                            <img class="w-100 img-fluid position-relative z-index-10" title="" src="/assets/images/products/product-15.jpg" alt="Bootstrap 5 Template by Pixel Rocket">
-                                                        </picture>
-                                                        <div class="card-actions">
-                                                            <span class="small text-uppercase tracking-wide fw-bolder text-center d-block">Quick Add</span>
-                                                            <div class="d-flex justify-content-center align-items-center flex-wrap mt-3">
-                                                                <button class="btn btn-outline-dark btn-sm mx-2">S</button>
-                                                                <button class="btn btn-outline-dark btn-sm mx-2">M</button>
-                                                                <button class="btn btn-outline-dark btn-sm mx-2">L</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="card-body px-0 text-center">
-                                                        <div class="d-flex justify-content-center align-items-center mx-auto mb-1">
-                                                            <!-- Review Stars Small-->
-                                                <div class="rating position-relative d-table">
-                                                    <div class="position-absolute stars" style="width: 80%">
-                                                        <i class="ri-star-fill text-dark mr-1"></i>
-                                                        <i class="ri-star-fill text-dark mr-1"></i>
-                                                        <i class="ri-star-fill text-dark mr-1"></i>
-                                                        <i class="ri-star-fill text-dark mr-1"></i>
-                                                        <i class="ri-star-fill text-dark mr-1"></i>
-                                                    </div>
-                                                    <div class="stars">
-                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                    </div>
-                                                </div> <span class="small fw-bolder ms-2 text-muted"> 4.7 (1669)</span>
-                                                        </div>
-                                                        <a class="mb-0 mx-2 mx-md-4 fs-p link-cover text-decoration-none d-block text-center"
-                                                            href="./product.html">Mens T-Shirt Phantom</a>
-                                                            <p class="fw-bolder m-0 mt-2">$1699.87</p>
-                                                    </div>
-                                                </div>
-                                                <!--/ Card Product-->
-                                            </div>
-                                            <div class="col-12 col-md-6">
-                                                <!-- Card Product-->
-                                                <div class="card position-relative h-100 card-listing hover-trigger">
-                                                    <div class="card-header">
-                                                        <picture class="position-relative overflow-hidden d-block bg-light">
-                                                            <img class="w-100 img-fluid position-relative z-index-10" title="" src="/assets/images/products/product-16.jpg" alt="Bootstrap 5 Template by Pixel Rocket">
-                                                        </picture>
-                                                        <div class="card-actions">
-                                                            <span class="small text-uppercase tracking-wide fw-bolder text-center d-block">Quick Add</span>
-                                                            <div class="d-flex justify-content-center align-items-center flex-wrap mt-3">
-                                                                <button class="btn btn-outline-dark btn-sm mx-2">S</button>
-                                                                <button class="btn btn-outline-dark btn-sm mx-2">M</button>
-                                                                <button class="btn btn-outline-dark btn-sm mx-2">L</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="card-body px-0 text-center">
-                                                        <div class="d-flex justify-content-center align-items-center mx-auto mb-1">
-                                                            <!-- Review Stars Small-->
-                                                <div class="rating position-relative d-table">
-                                                    <div class="position-absolute stars" style="width: 80%">
-                                                        <i class="ri-star-fill text-dark mr-1"></i>
-                                                        <i class="ri-star-fill text-dark mr-1"></i>
-                                                        <i class="ri-star-fill text-dark mr-1"></i>
-                                                        <i class="ri-star-fill text-dark mr-1"></i>
-                                                        <i class="ri-star-fill text-dark mr-1"></i>
-                                                    </div>
-                                                    <div class="stars">
-                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                    </div>
-                                                </div> <span class="small fw-bolder ms-2 text-muted"> 4.7 (1669)</span>
-                                                        </div>
-                                                        <a class="mb-0 mx-2 mx-md-4 fs-p link-cover text-decoration-none d-block text-center"
-                                                            href="./product.html">Heather T-Shirt</a>
-                                                            <p class="fw-bolder m-0 mt-2">$1699.87</p>
-                                                    </div>
-                                                </div>
-                                                <!--/ Card Product-->
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- /Swiper Slide-->
-                            
-                                    <!-- Swiper Slide-->
-                                    <div class="swiper-slide">
-                                        <div class="row g-3">
-                                            <div class="col-12 col-md-6">
-                                                <!-- Card Product-->
-                                                <div class="card position-relative h-100 card-listing hover-trigger">
-                                                    <div class="card-header">
-                                                        <picture class="position-relative overflow-hidden d-block bg-light">
-                                                            <img class="w-100 img-fluid position-relative z-index-10" title="" src="/assets/images/products/product-2.jpg" alt="Bootstrap 5 Template by Pixel Rocket">
-                                                        </picture>
-                                                        <div class="card-actions">
-                                                            <span class="small text-uppercase tracking-wide fw-bolder text-center d-block">Quick Add</span>
-                                                            <div class="d-flex justify-content-center align-items-center flex-wrap mt-3">
-                                                                <button class="btn btn-outline-dark btn-sm mx-2">S</button>
-                                                                <button class="btn btn-outline-dark btn-sm mx-2">M</button>
-                                                                <button class="btn btn-outline-dark btn-sm mx-2">L</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="card-body px-0 text-center">
-                                                        <div class="d-flex justify-content-center align-items-center mx-auto mb-1">
-                                                            <!-- Review Stars Small-->
-                                                <div class="rating position-relative d-table">
-                                                    <div class="position-absolute stars" style="width: 80%">
-                                                        <i class="ri-star-fill text-dark mr-1"></i>
-                                                        <i class="ri-star-fill text-dark mr-1"></i>
-                                                        <i class="ri-star-fill text-dark mr-1"></i>
-                                                        <i class="ri-star-fill text-dark mr-1"></i>
-                                                        <i class="ri-star-fill text-dark mr-1"></i>
-                                                    </div>
-                                                    <div class="stars">
-                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                    </div>
-                                                </div> <span class="small fw-bolder ms-2 text-muted"> 4.7 (1669)</span>
-                                                        </div>
-                                                        <a class="mb-0 mx-2 mx-md-4 fs-p link-cover text-decoration-none d-block text-center"
-                                                            href="./product.html">Mens Classic Hoodie</a>
-                                                            <p class="fw-bolder m-0 mt-2">$1699.87</p>
-                                                    </div>
-                                                </div>
-                                                <!--/ Card Product-->
-                                            </div>
-                                            <div class="col-12 col-md-6">
-                                                <!-- Card Product-->
-                                                <div class="card position-relative h-100 card-listing hover-trigger">
-                                                    <div class="card-header">
-                                                        <picture class="position-relative overflow-hidden d-block bg-light">
-                                                            <img class="w-100 img-fluid position-relative z-index-10" title="" src="/assets/images/products/product-3.jpg" alt="Bootstrap 5 Template by Pixel Rocket">
-                                                        </picture>
-                                                        <div class="card-actions">
-                                                            <span class="small text-uppercase tracking-wide fw-bolder text-center d-block">Quick Add</span>
-                                                            <div class="d-flex justify-content-center align-items-center flex-wrap mt-3">
-                                                                <button class="btn btn-outline-dark btn-sm mx-2">S</button>
-                                                                <button class="btn btn-outline-dark btn-sm mx-2">M</button>
-                                                                <button class="btn btn-outline-dark btn-sm mx-2">L</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="card-body px-0 text-center">
-                                                        <div class="d-flex justify-content-center align-items-center mx-auto mb-1">
-                                                            <!-- Review Stars Small-->
-                                                <div class="rating position-relative d-table">
-                                                    <div class="position-absolute stars" style="width: 80%">
-                                                        <i class="ri-star-fill text-dark mr-1"></i>
-                                                        <i class="ri-star-fill text-dark mr-1"></i>
-                                                        <i class="ri-star-fill text-dark mr-1"></i>
-                                                        <i class="ri-star-fill text-dark mr-1"></i>
-                                                        <i class="ri-star-fill text-dark mr-1"></i>
-                                                    </div>
-                                                    <div class="stars">
-                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                    </div>
-                                                </div> <span class="small fw-bolder ms-2 text-muted"> 4.7 (1669)</span>
-                                                        </div>
-                                                        <a class="mb-0 mx-2 mx-md-4 fs-p link-cover text-decoration-none d-block text-center"
-                                                            href="./product.html">Womens Essential Hoodie</a>
-                                                            <p class="fw-bolder m-0 mt-2">$1699.87</p>
-                                                    </div>
-                                                </div>
-                                                <!--/ Card Product-->
-                                            </div>
-                                            <div class="col-12 col-md-6">
-                                                <!-- Card Product-->
-                                                <div class="card position-relative h-100 card-listing hover-trigger">
-                                                    <div class="card-header">
-                                                        <picture class="position-relative overflow-hidden d-block bg-light">
-                                                            <img class="w-100 img-fluid position-relative z-index-10" title="" src="/assets/images/products/product-4.jpg" alt="Bootstrap 5 Template by Pixel Rocket">
-                                                        </picture>
-                                                        <div class="card-actions">
-                                                            <span class="small text-uppercase tracking-wide fw-bolder text-center d-block">Quick Add</span>
-                                                            <div class="d-flex justify-content-center align-items-center flex-wrap mt-3">
-                                                                <button class="btn btn-outline-dark btn-sm mx-2">S</button>
-                                                                <button class="btn btn-outline-dark btn-sm mx-2">M</button>
-                                                                <button class="btn btn-outline-dark btn-sm mx-2">L</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="card-body px-0 text-center">
-                                                        <div class="d-flex justify-content-center align-items-center mx-auto mb-1">
-                                                            <!-- Review Stars Small-->
-                                                <div class="rating position-relative d-table">
-                                                    <div class="position-absolute stars" style="width: 80%">
-                                                        <i class="ri-star-fill text-dark mr-1"></i>
-                                                        <i class="ri-star-fill text-dark mr-1"></i>
-                                                        <i class="ri-star-fill text-dark mr-1"></i>
-                                                        <i class="ri-star-fill text-dark mr-1"></i>
-                                                        <i class="ri-star-fill text-dark mr-1"></i>
-                                                    </div>
-                                                    <div class="stars">
-                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                    </div>
-                                                </div> <span class="small fw-bolder ms-2 text-muted"> 4.7 (1669)</span>
-                                                        </div>
-                                                        <a class="mb-0 mx-2 mx-md-4 fs-p link-cover text-decoration-none d-block text-center"
-                                                            href="./product.html">Sherpa Hoodie</a>
-                                                            <p class="fw-bolder m-0 mt-2">$1699.87</p>
-                                                    </div>
-                                                </div>
-                                                <!--/ Card Product-->
-                                            </div>
-                                            <div class="col-12 col-md-6">
-                                                <!-- Card Product-->
-                                                <div class="card position-relative h-100 card-listing hover-trigger">
-                                                    <div class="card-header">
-                                                        <picture class="position-relative overflow-hidden d-block bg-light">
-                                                            <img class="w-100 img-fluid position-relative z-index-10" title="" src="/assets/images/products/product-5.jpg" alt="Bootstrap 5 Template by Pixel Rocket">
-                                                        </picture>
-                                                        <div class="card-actions">
-                                                            <span class="small text-uppercase tracking-wide fw-bolder text-center d-block">Quick Add</span>
-                                                            <div class="d-flex justify-content-center align-items-center flex-wrap mt-3">
-                                                                <button class="btn btn-outline-dark btn-sm mx-2">S</button>
-                                                                <button class="btn btn-outline-dark btn-sm mx-2">M</button>
-                                                                <button class="btn btn-outline-dark btn-sm mx-2">L</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="card-body px-0 text-center">
-                                                        <div class="d-flex justify-content-center align-items-center mx-auto mb-1">
-                                                            <!-- Review Stars Small-->
-                                                <div class="rating position-relative d-table">
-                                                    <div class="position-absolute stars" style="width: 80%">
-                                                        <i class="ri-star-fill text-dark mr-1"></i>
-                                                        <i class="ri-star-fill text-dark mr-1"></i>
-                                                        <i class="ri-star-fill text-dark mr-1"></i>
-                                                        <i class="ri-star-fill text-dark mr-1"></i>
-                                                        <i class="ri-star-fill text-dark mr-1"></i>
-                                                    </div>
-                                                    <div class="stars">
-                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                    </div>
-                                                </div> <span class="small fw-bolder ms-2 text-muted"> 4.7 (1669)</span>
-                                                        </div>
-                                                        <a class="mb-0 mx-2 mx-md-4 fs-p link-cover text-decoration-none d-block text-center"
-                                                            href="./product.html">Mens Flyroam Hoodie</a>
-                                                            <p class="fw-bolder m-0 mt-2">$1699.87</p>
-                                                    </div>
-                                                </div>
-                                                <!--/ Card Product-->
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- /Swiper Slide-->
-                            
-                                    <!-- Swiper Slide-->
-                                    <div class="swiper-slide">
-                                        <div class="row g-3">
-                                            <div class="col-12 col-md-6">
-                                                <!-- Card Product-->
-                                                <div class="card position-relative h-100 card-listing hover-trigger">
-                                                    <div class="card-header">
-                                                        <picture class="position-relative overflow-hidden d-block bg-light">
-                                                            <img class="w-100 img-fluid position-relative z-index-10" title="" src="/assets/images/products/product-12.jpg" alt="Bootstrap 5 Template by Pixel Rocket">
-                                                        </picture>
-                                                        <div class="card-actions">
-                                                            <span class="small text-uppercase tracking-wide fw-bolder text-center d-block">Quick Add</span>
-                                                            <div class="d-flex justify-content-center align-items-center flex-wrap mt-3">
-                                                                <button class="btn btn-outline-dark btn-sm mx-2">S</button>
-                                                                <button class="btn btn-outline-dark btn-sm mx-2">M</button>
-                                                                <button class="btn btn-outline-dark btn-sm mx-2">L</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="card-body px-0 text-center">
-                                                        <div class="d-flex justify-content-center align-items-center mx-auto mb-1">
-                                                            <!-- Review Stars Small-->
-                                                <div class="rating position-relative d-table">
-                                                    <div class="position-absolute stars" style="width: 80%">
-                                                        <i class="ri-star-fill text-dark mr-1"></i>
-                                                        <i class="ri-star-fill text-dark mr-1"></i>
-                                                        <i class="ri-star-fill text-dark mr-1"></i>
-                                                        <i class="ri-star-fill text-dark mr-1"></i>
-                                                        <i class="ri-star-fill text-dark mr-1"></i>
-                                                    </div>
-                                                    <div class="stars">
-                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                    </div>
-                                                </div> <span class="small fw-bolder ms-2 text-muted"> 4.7 (1669)</span>
-                                                        </div>
-                                                        <a class="mb-0 mx-2 mx-md-4 fs-p link-cover text-decoration-none d-block text-center"
-                                                            href="./product.html">Mens Tee Faded Brown</a>
-                                                            <p class="fw-bolder m-0 mt-2">$1699.87</p>
-                                                    </div>
-                                                </div>
-                                                <!--/ Card Product-->
-                                            </div>
-                                            <div class="col-12 col-md-6">
-                                                <!-- Card Product-->
-                                                <div class="card position-relative h-100 card-listing hover-trigger">
-                                                    <div class="card-header">
-                                                        <picture class="position-relative overflow-hidden d-block bg-light">
-                                                            <img class="w-100 img-fluid position-relative z-index-10" title="" src="/assets/images/products/product-14.jpg" alt="Bootstrap 5 Template by Pixel Rocket">
-                                                        </picture>
-                                                        <div class="card-actions">
-                                                            <span class="small text-uppercase tracking-wide fw-bolder text-center d-block">Quick Add</span>
-                                                            <div class="d-flex justify-content-center align-items-center flex-wrap mt-3">
-                                                                <button class="btn btn-outline-dark btn-sm mx-2">S</button>
-                                                                <button class="btn btn-outline-dark btn-sm mx-2">M</button>
-                                                                <button class="btn btn-outline-dark btn-sm mx-2">L</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="card-body px-0 text-center">
-                                                        <div class="d-flex justify-content-center align-items-center mx-auto mb-1">
-                                                            <!-- Review Stars Small-->
-                                                <div class="rating position-relative d-table">
-                                                    <div class="position-absolute stars" style="width: 80%">
-                                                        <i class="ri-star-fill text-dark mr-1"></i>
-                                                        <i class="ri-star-fill text-dark mr-1"></i>
-                                                        <i class="ri-star-fill text-dark mr-1"></i>
-                                                        <i class="ri-star-fill text-dark mr-1"></i>
-                                                        <i class="ri-star-fill text-dark mr-1"></i>
-                                                    </div>
-                                                    <div class="stars">
-                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                    </div>
-                                                </div> <span class="small fw-bolder ms-2 text-muted"> 4.7 (1669)</span>
-                                                        </div>
-                                                        <a class="mb-0 mx-2 mx-md-4 fs-p link-cover text-decoration-none d-block text-center"
-                                                            href="./product.html">Mens Flyroam T-Shirt</a>
-                                                            <p class="fw-bolder m-0 mt-2">$1699.87</p>
-                                                    </div>
-                                                </div>
-                                                <!--/ Card Product-->
-                                            </div>
-                                            <div class="col-12 col-md-6">
-                                                <!-- Card Product-->
-                                                <div class="card position-relative h-100 card-listing hover-trigger">
-                                                    <div class="card-header">
-                                                        <picture class="position-relative overflow-hidden d-block bg-light">
-                                                            <img class="w-100 img-fluid position-relative z-index-10" title="" src="/assets/images/products/product-15.jpg" alt="Bootstrap 5 Template by Pixel Rocket">
-                                                        </picture>
-                                                        <div class="card-actions">
-                                                            <span class="small text-uppercase tracking-wide fw-bolder text-center d-block">Quick Add</span>
-                                                            <div class="d-flex justify-content-center align-items-center flex-wrap mt-3">
-                                                                <button class="btn btn-outline-dark btn-sm mx-2">S</button>
-                                                                <button class="btn btn-outline-dark btn-sm mx-2">M</button>
-                                                                <button class="btn btn-outline-dark btn-sm mx-2">L</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="card-body px-0 text-center">
-                                                        <div class="d-flex justify-content-center align-items-center mx-auto mb-1">
-                                                            <!-- Review Stars Small-->
-                                                <div class="rating position-relative d-table">
-                                                    <div class="position-absolute stars" style="width: 80%">
-                                                        <i class="ri-star-fill text-dark mr-1"></i>
-                                                        <i class="ri-star-fill text-dark mr-1"></i>
-                                                        <i class="ri-star-fill text-dark mr-1"></i>
-                                                        <i class="ri-star-fill text-dark mr-1"></i>
-                                                        <i class="ri-star-fill text-dark mr-1"></i>
-                                                    </div>
-                                                    <div class="stars">
-                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                    </div>
-                                                </div> <span class="small fw-bolder ms-2 text-muted"> 4.7 (1669)</span>
-                                                        </div>
-                                                        <a class="mb-0 mx-2 mx-md-4 fs-p link-cover text-decoration-none d-block text-center"
-                                                            href="./product.html">Little Brown T</a>
-                                                            <p class="fw-bolder m-0 mt-2">$1699.87</p>
-                                                    </div>
-                                                </div>
-                                                <!--/ Card Product-->
-                                            </div>
-                                            <div class="col-12 col-md-6">
-                                                <!-- Card Product-->
-                                                <div class="card position-relative h-100 card-listing hover-trigger">
-                                                    <div class="card-header">
-                                                        <picture class="position-relative overflow-hidden d-block bg-light">
-                                                            <img class="w-100 img-fluid position-relative z-index-10" title="" src="/assets/images/products/product-16.jpg" alt="Bootstrap 5 Template by Pixel Rocket">
-                                                        </picture>
-                                                        <div class="card-actions">
-                                                            <span class="small text-uppercase tracking-wide fw-bolder text-center d-block">Quick Add</span>
-                                                            <div class="d-flex justify-content-center align-items-center flex-wrap mt-3">
-                                                                <button class="btn btn-outline-dark btn-sm mx-2">S</button>
-                                                                <button class="btn btn-outline-dark btn-sm mx-2">M</button>
-                                                                <button class="btn btn-outline-dark btn-sm mx-2">L</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="card-body px-0 text-center">
-                                                        <div class="d-flex justify-content-center align-items-center mx-auto mb-1">
-                                                            <!-- Review Stars Small-->
-                                                <div class="rating position-relative d-table">
-                                                    <div class="position-absolute stars" style="width: 80%">
-                                                        <i class="ri-star-fill text-dark mr-1"></i>
-                                                        <i class="ri-star-fill text-dark mr-1"></i>
-                                                        <i class="ri-star-fill text-dark mr-1"></i>
-                                                        <i class="ri-star-fill text-dark mr-1"></i>
-                                                        <i class="ri-star-fill text-dark mr-1"></i>
-                                                    </div>
-                                                    <div class="stars">
-                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                    </div>
-                                                </div> <span class="small fw-bolder ms-2 text-muted"> 4.7 (1669)</span>
-                                                        </div>
-                                                        <a class="mb-0 mx-2 mx-md-4 fs-p link-cover text-decoration-none d-block text-center"
-                                                            href="./product.html">Mens Flyroam Sneakers</a>
-                                                            <p class="fw-bolder m-0 mt-2">$1699.87</p>
-                                                    </div>
-                                                </div>
-                                                <!--/ Card Product-->
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- /Swiper Slide-->
-                            
-                                </div>
-                            </div>                            <!-- / Swiper-->
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!-- / Linked Product Carousels-->
-
 
         <!-- Sale Banner -->
         <section class="position-relative my-5 my-md-7 my-lg-9 bg-dark" data-aos="fade-in">
@@ -1321,18 +262,11 @@
                         </div>
                         <div class="col-12 col-lg-4 d-flex justify-content-center flex-column" data-aos="fade-up"
                             data-aos-delay="250">
-                            <a href="./category.html"
+                            @foreach ( App\Models\Product::getCategorys() as $group)
+                                <a href="{{route('shop.category_group', $group->category)}}"
                                 class="btn btn-orange btn-orange-chunky text-white my-1"><span>Shop
-                                    Menswear</span></a>
-                            <a href="./category.html"
-                                class="btn btn-orange btn-orange-chunky text-white my-1"><span>Shop
-                                    Womenswear</span></a>
-                            <a href="./category.html"
-                                class="btn btn-orange btn-orange-chunky text-white my-1"><span>Shop
-                                    Kidswear</span></a>
-                            <a href="./category.html"
-                                class="btn btn-orange btn-orange-chunky text-white my-1"><span>Shop
-                                    Accessories</span></a>
+                                    {{$group->category}}</span></a>
+                            @endforeach
                         </div>
                         <div class="col-12 col-lg-4 text-center text-lg-end" data-aos="fade-left"
                             data-aos-delay="250">

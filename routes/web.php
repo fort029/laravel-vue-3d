@@ -24,9 +24,11 @@ Route::get('/', function () {
 
 Route::get('shop', [ShopController::class,'index'])->name('shop.index');
 Route::get('shop/category', [ShopController::class,'category'])->name('shop.category');
+Route::get('shop/category/{category}', [ShopController::class,'category'])->name('shop.category_group');
 Route::get('shop/product/{id}', [ShopController::class,'product'])->name('shop.product');
 Route::get('shop/basket', [ShopController::class,'basket'])->name('shop.basket');
 Route::get('shop/checkout', [ShopController::class,'checkout'])->name('shop.checkout');
+Route::post('shop/xhr_products', [ShopController::class,'xhr_products']);
 
 Auth::routes(['register' => false]);
 
