@@ -273,7 +273,7 @@
                                     </div>
                                     <div>
                                         <p class="mb-1 fs-6 fw-bolder">{{$row->name}}</p>
-                                        <span class="fs-xs text-uppercase fw-bolder text-muted">{{$row->options->has('size') ? $row->options->size : ''}}</span>
+                                        <span class="fs-xs text-uppercase fw-bolder text-muted">{{$row->options->has('size') ? 'Size: '.$row->options->size : ''}} {{$row->options->has('color') ? 'Color: '.$row->options->color : ''}}</span>
                                     </div>
                                 </div>
                                 <div class="flex-shrink-0 fw-bolder">

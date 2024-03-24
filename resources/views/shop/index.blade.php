@@ -149,7 +149,8 @@
                                 <div class="d-flex justify-content-center align-items-center mx-auto mb-1">
                                     <!-- Review Stars Small-->
                                     <div class="rating position-relative d-table">
-                                        <div class="position-absolute stars" style="{{$product->rating * 100 / 5}}">
+                                        @php $rating = $product->rating @endphp
+                                        <div class="position-absolute stars" style="width: {{$rating * 100 / 5}}%">
                                             <i class="ri-star-fill text-dark mr-1"></i>
                                             <i class="ri-star-fill text-dark mr-1"></i>
                                             <i class="ri-star-fill text-dark mr-1"></i>
@@ -164,7 +165,7 @@
                                             <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
                                         </div>
                                     </div> 
-                                    <span class="small fw-bolder ms-2 text-muted"> {{$product->rating}} ({{$product->rating_count}})</span>
+                                    <span class="small fw-bolder ms-2 text-muted"> {{$rating}} ({{$product->rating_count}})</span>
                                 </div>
                                 <a class="mb-0 mx-2 mx-md-4 fs-p link-cover text-decoration-none d-block text-center"
                                     href="{{route('shop.product',$product->id)}}">{{$product->name}}</a>

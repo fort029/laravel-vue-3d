@@ -1,10 +1,7 @@
 
 @extends('layouts.shop')
-@section('sripts')
-    @vite(['resources/js/shop.js'])
-@endsection
 @section('content')    
-    <section class="mt-0" id="app">
+    <section class="mt-0" id="category">
         <!-- Category Top Banner -->
         <div class="py-6 bg-img-cover bg-dark bg-overlay-gradient-dark position-relative overflow-hidden mb-4 bg-pos-center-center"
             style="background-image: url(/assets/images/banners/banner-1.jpg);">

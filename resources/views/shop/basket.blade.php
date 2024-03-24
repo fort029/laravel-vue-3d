@@ -36,7 +36,7 @@
                                                 <h6 class="mb-2 fw-bolder">
                                                     {{$row->name}}
                                                 </h6>
-                                                <small class="d-block text-muted">{{$row->options->has('size') ? $row->options->size : ''}}</small>
+                                                <small class="d-block text-muted">{{$row->options->has('size') ? 'Size: '.$row->options->size : ''}} {{$row->options->has('color') ? 'Color: '.$row->options->color : ''}}</small>
                                             </div>
                                         </td>
                                     <!-- Details -->
@@ -52,8 +52,8 @@
                                     <!-- Actions -->
                                         <td class="f-h-0">
                                             <div class="d-flex justify-content-between flex-column align-items-end h-100">
-                                                <i class="ri-close-circle-line ri-lg"></i>
-                                                <p class="fw-bolder mt-3 m-sm-0">${{$row->total}}</p>
+                                                <a href="{{route('shop.remove_product',['id'=>$row->rowId])}}" class="link-danger text-decoration-none"><i class="ri-close-circle-line ri-lg"></i></a>
+                                                <p class="fw-bolder mt-3 m-sm-0">${{round($row->total,2)}}</p>
                                             </div>
                                         </td>
                                     <!-- /Actions -->
@@ -107,9 +107,9 @@
                     <!-- / Coupon Code-->
                 
                     <!-- Checkout Button-->
-                    <a href="./checkout.html" class="btn btn-white w-100 text-center mt-3"
+                    <a href="{{route('shop.checkout')}}" class="btn btn-white w-100 text-center mt-3"
                         role="button"><i class="ri-secure-payment-line align-bottom"></i> Proceed to checkout</a>
-                    <a href="./checkout.html" class="btn btn-orange w-100 text-center mt-3"
+                    <a href="{{route('shop.checkout')}}" class="btn btn-orange w-100 text-center mt-3"
                         role="button"><i class="ri-paypal-line align-bottom"></i> Checkout with PayPal</a>
                     <!-- Checkout Button-->
                 </div>

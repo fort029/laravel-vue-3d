@@ -241,6 +241,19 @@
 
             <hr class="featurette-divider">
             
+            <div class="row featurette" v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }">
+                <div class="col-md-7">
+                    <h2 class="featurette-heading"><a href="{{route('shop.index')}}">SHOP</a> <span class="text-muted">e-commerce.</span>
+                    </h2>
+                    <p class="lead">A simple shop using known technologies.</p>
+                </div>
+                <div class="col-md-5">
+                    <img src="/assets/images/shop.png" style="width:100%">
+                </div>
+            </div>
+
+            <hr class="featurette-divider">
+            
             <!-- /END THE FEATURETTES -->
             </div><!-- /.container -->
 @endsection
